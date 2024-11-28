@@ -43,7 +43,6 @@ if (isset($_SESSION['products'])) {
                         <tr>
                             <td><?= htmlspecialchars($product['sanpham']); ?></td>
                             <td><?= htmlspecialchars($product['Gia']); ?> VND</td>
-                            <!-- Chỉnh sửa link để thêm index vào -->
                             <td><a href="edit.php?id=<?= $index ?>" class="edit-icon">✏️</a></td>
                             <td><span class="delete-icon" onclick="deleteProduct(this)">🗑️</span></td>
                         </tr>

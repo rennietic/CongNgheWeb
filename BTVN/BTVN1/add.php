@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-top: 10px;
         }
     </style>
-    </style>
+    
 </head>
 <body>
     <?php include 'header.php'; ?>
