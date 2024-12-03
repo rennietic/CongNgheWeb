@@ -51,13 +51,5 @@ if (isset($_SESSION['products'])) {
             </tbody>
         </table>
     </div>
-
-    <script>
-        function deleteProduct(element) {
-            // Xử lý xóa sản phẩm (có thể sử dụng AJAX hoặc form gửi yêu cầu)
-            var row = element.parentNode;
-            row.parentNode.removeChild(row);
-        }
-    </script>
 </body>
 </html>

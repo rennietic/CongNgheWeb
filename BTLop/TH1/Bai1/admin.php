@@ -66,9 +66,10 @@ include 'Flower.php'; // Import dữ liệu hoa
                     <td><?= $flower['Content'] ?></td>
                     <td><img src="<?= $flower['Picture'] ?>" alt="<?= $flower['Name'] ?>" width="100"></td>
                     <td>
-                        <a href="edit.php?id=<?= $index ?>" class="edit-icon">✏️</a>
-                        <span class="delete-icon" onclick="deleteProduct(this)">🗑️</span>
-                    </td>
+                        <a href="edit.php?id=<?= $key ?>" class="edit-icon">✏️ Sửa</a>
+                        <a href="delete.php?id=<?= $key ?>" class="delete-icon" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">🗑️ Xóa</a>
+</td>
+
                     
                 </tr>
             <?php endforeach; ?>

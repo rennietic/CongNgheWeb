@@ -2,43 +2,43 @@
 // Import dữ liệu hoa
 include 'Flower.php';
 
-// Kiểm tra xem `id` được truyền qua URL hay không
-if (isset($_GET['id']) && isset($Flower[$_GET['id']])) {
-    $index = $_GET['id'];
-    $flower = $Flower[$index];
+// Kiểm tra xem ID có được truyền qua URL không
+if (!isset($_GET['id']) || !isset($Flower[$_GET['id']])) {
+    echo "Loài hoa không tồn tại!";
+    exit;
+}
 
-    // Xử lý khi form được submit
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $Flower[$index]['Name'] = $_POST['Name'];
-        $Flower[$index]['Content'] = $_POST['Content'];
+// Lấy thông tin hoa cần chỉnh sửa
+$id = $_GET['id'];
+$flower = $Flower[$id];
 
-        // Xử lý cập nhật ảnh mới (nếu có)
-        if (!empty($_FILES['Picture']['name'])) {
-            $targetDir = "images/";
-            $targetFile = $targetDir . basename($_FILES['Picture']['name']);
-            $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+// Xử lý khi form được submit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $Flower[$id]['Name'] = $_POST['Name'];
+    $Flower[$id]['Content'] = $_POST['Content'];
 
-            // Kiểm tra file hợp lệ
-            if (in_array($imageFileType, ['jpg', 'jpeg', 'png', 'webp'])) {
-                if (move_uploaded_file($_FILES['Picture']['tmp_name'], $targetFile)) {
-                    $Flower[$index]['Picture'] = $targetFile;
-                } else {
-                    echo "Lỗi khi tải ảnh lên!";
-                }
+    // Xử lý ảnh nếu người dùng chọn ảnh mới
+    if (!empty($_FILES['Picture']['name'])) {
+        $targetDir = "images/";
+        $targetFile = $targetDir . basename($_FILES['Picture']['name']);
+        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+        // Kiểm tra định dạng ảnh hợp lệ
+        if (in_array($imageFileType, ['jpg', 'jpeg', 'png', 'webp'])) {
+            if (move_uploaded_file($_FILES['Picture']['tmp_name'], $targetFile)) {
+                $Flower[$id]['Picture'] = $targetFile;
             } else {
-                echo "Chỉ chấp nhận định dạng JPG, JPEG, PNG, hoặc WEBP.";
+                echo "Lỗi khi tải ảnh lên!";
             }
+        } else {
+            echo "Chỉ chấp nhận định dạng JPG, JPEG, PNG, hoặc WEBP.";
         }
-
-        // Lưu lại dữ liệu đã chỉnh sửa vào file Flower.php
-        file_put_contents('Flower.php', '<?php $Flower = ' . var_export($Flower, true) . ';');
-
-        // Chuyển về trang quản trị sau khi cập nhật
-        header('Location: admin.php');
-        exit;
     }
-} else {
-    // Nếu không tìm thấy ID hợp lệ, quay về trang quản trị
+
+    // Lưu thay đổi vào file Flower.php
+    file_put_contents('Flower.php', '<?php $Flower = ' . var_export($Flower, true) . ';');
+
+    // Chuyển hướng về trang admin sau khi lưu
     header('Location: admin.php');
     exit;
 }
@@ -49,7 +49,7 @@ if (isset($_GET['id']) && isset($Flower[$_GET['id']])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chỉnh Sửa Hoa</title>
+    <title>Sửa Loài Hoa</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -102,17 +102,18 @@ if (isset($_GET['id']) && isset($Flower[$_GET['id']])) {
 </head>
 <body>
     <div class="form-container">
-        <h1>Chỉnh Sửa Thông Tin Hoa</h1>
+        <h1>Sửa Loài Hoa</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <label for="Name">Tên Hoa:</label>
             <input type="text" name="Name" value="<?= htmlspecialchars($flower['Name']) ?>" required>
-            
+
             <label for="Content">Mô tả:</label>
             <input type="text" name="Content" value="<?= htmlspecialchars($flower['Content']) ?>" required>
-            
-            <label for="Picture">Cập nhật hình ảnh:</label>
+
+            <label for="Picture">Hình Ảnh (Hiện tại):</label>
+            <img src="<?= $flower['Picture'] ?>" alt="<?= $flower['Name'] ?>" width="100">
+            <br>
             <input type="file" name="Picture" accept="image/*">
-            <img src="<?= $flower['Picture'] ?>" alt="Hình hiện tại" width="150" style="margin-top: 10px;">
 
             <button type="submit">Lưu Thay Đổi</button>
         </form>
