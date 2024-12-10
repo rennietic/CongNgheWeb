@@ -14,7 +14,7 @@ $options = [
 ];
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);  // Sử dụng đúng tên biến $options
+    $pdo = new PDO($dsn, $user, $pass, $options); 
     // echo "Kết nối thành công";
 } catch (\PDOException $e) {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
