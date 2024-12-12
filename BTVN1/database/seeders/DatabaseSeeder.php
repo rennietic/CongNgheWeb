@@ -19,6 +19,12 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $this->call(StudentSeeder::class); // Thêm dấu chấm phẩy
+        $this->call([
+            ComputerSeeder::class,
+            BookSeeder::class,
+            LaptopSeeder::class,
+            RentersSeeder::class,
+            StudentsSeeder::class,
+        ]);
     }
 }
